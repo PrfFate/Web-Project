@@ -2,6 +2,8 @@ package com.aliacar.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,10 @@ import org.springframework.stereotype.Service;
 import com.aliacar.entities.Post;
 import com.aliacar.entities.User;
 import com.aliacar.repository.PostRepository;
-import com.aliacar.repository.UserRepository;
+
 import com.aliacar.requests.PostCreateRequest;
 import com.aliacar.requests.PostUpdateRequest;
+import com.aliacar.response.PostResponse;
 
 
 @Service
@@ -24,12 +27,14 @@ public class PostService {
     @Autowired
     private UserService userService;
 
-    public List<Post> getAllPosts(Optional<Long> userId) {
-      
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+        List<Post> list;
         if(userId.isPresent()){
-            return postRepository.findByUserId(userId.get());
+            list= postRepository.findByUserId(userId.get());
+        }else{
+        list= postRepository.findAll();
         }
-        return postRepository.findAll();
+        return list.stream().map(p -> new PostResponse(p)).collect(Collectors.toList());
         
     }
 

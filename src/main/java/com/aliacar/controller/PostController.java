@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aliacar.entities.Post;
 import com.aliacar.requests.PostCreateRequest;
 import com.aliacar.requests.PostUpdateRequest;
+import com.aliacar.response.PostResponse;
 import com.aliacar.service.PostService;
 
 @RestController
@@ -27,7 +28,7 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam Optional<Long> userId) {
+    public List<PostResponse> getAllPosts(@RequestParam Optional<Long> userId) {
         return postService.getAllPosts(userId);
     }
 
